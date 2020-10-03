@@ -1,24 +1,21 @@
 <?php
 
-/**
- * @file
- * Contains zero_preprocess.module.
- */
+function zero_preprocess_preprocess(&$vars, $hook, $template) {
+  if (!empty($template['zero']['preprocess'])) {
+    /** @noinspection PhpIncludeInspection */
+    include $template['zero']['preprocess'];
+  }
+}
 
-use Drupal\Core\Routing\RouteMatchInterface;
+function zero_preprocess_theme_registry_alter(&$theme_registry) {
+  foreach ($theme_registry as $name => $item) {
+    if (empty($item['path']) || empty($item['template'])) continue;
 
-/**
- * Implements hook_help().
- */
-function zero_preprocess_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-    // Main module help for the zero_preprocess module.
-    case 'help.page.zero_preprocess':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Add preprocess file loading functionality') . '</p>';
-      return $output;
-
-    default:
+    $file = $item['path'] . '/' . $item['template'] . '.preprocess.php';
+    if (is_file($file)) {
+      $theme_registry[$name]['zero'] = [
+        'preprocess' => $file,
+      ];
+    }
   }
 }
