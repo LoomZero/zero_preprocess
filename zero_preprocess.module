@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains zero_preprocess.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function zero_preprocess_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the zero_preprocess module.
+    case 'help.page.zero_preprocess':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Add preprocess file loading functionality') . '</p>';
+      return $output;
+
+    default:
+  }
+}
