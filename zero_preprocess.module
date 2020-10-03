@@ -19,3 +19,11 @@ function zero_preprocess_theme_registry_alter(&$theme_registry) {
     }
   }
 }
+
+function zero_preprocess_module_implements_alter(&$implementations, $hook) {
+  if ($hook === 'preprocess') {
+    $group = $implementations['zero_preprocess'];
+    unset($implementations['zero_preprocess']);
+    $implementations['zero_preprocess'] = $group;
+  }
+}
