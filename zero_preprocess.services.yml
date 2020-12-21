@@ -1,0 +1,17 @@
+services:
+  zero.preprocess.extender:
+    class: Drupal\zero_preprocess\Service\PreprocessExtenderManager
+    arguments: [ '@class_resolver' ]
+    tags:
+      - { name: service_id_collector, tag: zero_preprocess_extender }
+
+  zero.preprocess.config:
+    class: Drupal\zero_preprocess\Service\ZeroConfigManager
+    arguments: [ '@class_resolver' ]
+    tags:
+      - { name: service_id_collector, tag: zero_config }
+
+  zero.preprocess.test.config:
+    class: Drupal\zero_preprocess\Config\ZeroConfigBag
+    tags:
+      - { name: zero_config }

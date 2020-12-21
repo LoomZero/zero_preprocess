@@ -1,21 +1,35 @@
 <?php
 
+use Drupal\zero_preprocess\Service\PreprocessExtenderManager;
+
 function zero_preprocess_preprocess(&$vars, $hook, $template) {
   if (!empty($template['zero']['preprocess'])) {
-    /** @noinspection PhpIncludeInspection */
-    include $template['zero']['preprocess'];
+    /** @var PreprocessExtenderManager $extender */
+    $extender = Drupal::service('zero.preprocess.extender');
+
+    $vars['zero'] = [];
+    $extender->preprocess($vars, $template['zero'], $template);
+    $extender->includePreprocess($vars, $template);
   }
 }
 
 function zero_preprocess_theme_registry_alter(&$theme_registry) {
+  /** @var PreprocessExtenderManager $extender */
+  $extender = Drupal::service('zero.preprocess.extender');
+
   foreach ($theme_registry as $name => $item) {
     if (empty($item['path']) || empty($item['template'])) continue;
+    $zero = [];
 
     $file = $item['path'] . '/' . $item['template'] . '.preprocess.php';
     if (is_file($file)) {
-      $theme_registry[$name]['zero'] = [
-        'preprocess' => $file,
-      ];
+      $zero['preprocess'] = $file;
+    }
+
+    $extender->registry($zero, $item, $name, $theme_registry);
+
+    if (count($zero)) {
+      $theme_registry[$name]['zero'] = $zero;
     }
   }
 }
