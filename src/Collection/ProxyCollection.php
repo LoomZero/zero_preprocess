@@ -44,6 +44,10 @@ class ProxyCollection extends ArrayObject {
     return $response;
   }
 
+  public function map(callable $callback, ...$args): array {
+    return array_map($callback, $this->getArrayCopy(), ...$args);
+  }
+
   public function filter(callable $callback = NULL, int $flag = 0) {
     return $this->arrayCall('array_filter', $callback, $flag);
   }
