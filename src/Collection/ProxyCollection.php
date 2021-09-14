@@ -27,6 +27,10 @@ class ProxyCollection extends ArrayObject {
     return new self($results);
   }
 
+  public function array() {
+    return $this->getArrayCopy();
+  }
+
   public function arrayCall(callable $array_function, ...$args) {
     $array = $this->exchangeArray([]);
     $response = $array_function($array, ...$args);
@@ -42,6 +46,10 @@ class ProxyCollection extends ArrayObject {
     $response = $array_function($array, ...$args);
     $this->exchangeArray($array);
     return $response;
+  }
+
+  public function join($glue = ' ') {
+    return implode($glue, $this->getArrayCopy());
   }
 
   public function map(callable $callback, ...$args): array {
