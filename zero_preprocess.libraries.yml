@@ -1,3 +1,4 @@
-base:
+comp:
   js:
+    js/src/ZeroComponent.js: {}
     js/zero.js: {}
