@@ -1,5 +1,4 @@
 TOC
----
 
 - [1. - Install](#1---install)
 - [2. - Update](#2---update)
