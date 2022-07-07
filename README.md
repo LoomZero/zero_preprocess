@@ -1,45 +1,27 @@
-# 1. - Zero Preprocess
+TOC
+---
 
-- [1. - Zero Preprocess](#1---zero-preprocess)
-- [2. - Install](#2---install)
-- [3. - Update](#3---update)
-- [4. - Usage](#4---usage)
+- [1. - Install](#1---install)
+- [2. - Update](#2---update)
+- [3. - Usage](#3---usage)
 
-# 2. - Install 
+# 1. - Install 
 
-Add this to your `repositories` in `composer.json`
-
-```json
-{
-    "type": "composer",
-    "url": "https://raw.githubusercontent.com/LoomZero/zero-composer-register/master/"
-}
+```shell
+composer req loomzero/zero_preprocess
+drush en zero_preprocess
 ```
 
-Execute:
+Please ensure that the repository `loomzero/zero-composer-register` is known for composer.
+When not see https://github.com/LoomZero/zero-composer-register#1---use
 
-`composer require loomzero/zero_preprocess`
+# 2. - Update
 
-Add this to your theme info file (`<theme>.info.yml`):
-
-```
-component-libraries:
-  components:
-    paths:
-    - components
+```shell
+composer update loomzero/zero_preprocess -W
 ```
 
-Execute:
-
-`drush en zero_preprocess`
-
-# 3. - Update
-
-Execute:
-
-`composer update "loomzero/zero_preprocess"`
-
-# 4. - Usage
+# 3. - Usage
 
 Create a file like `<template>.preprocess.php` in the same directory as the template and run `drush cr` to register the file.
 Whenever the template will be loaded the preprocess file will be executed.
