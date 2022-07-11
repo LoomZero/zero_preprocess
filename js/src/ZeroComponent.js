@@ -28,7 +28,7 @@
    * @param {string} name
    * @returns {string}
    */
-  ZeroComponent.prototype.getElementSelector = function element(name) {
+  ZeroComponent.prototype.getElementSelector = function getElementSelector(name) {
     return '.' + this.component + '__' + name;
   };
 
@@ -170,13 +170,13 @@
    * @param {mixed} value
    * @param {T_CookiesOptions} options
    *
-   * @returns {mixed}
+   * @returns {this}
    */
   ZeroComponent.prototype.setCookie = function setCookie(value, options) {
     if (!window.Cookies) throw new Error('Please add dependency "core/js-cookie" for the component "' + this.component + '"');
     options = options || {};
     window.Cookies.set(this.component + (options.key ? '__' + options.key : ''), JSON.stringify(value), options);
-    return value;
+    return this;
   };
 
   ZeroComponent.prototype.trigger = function trigger() {
