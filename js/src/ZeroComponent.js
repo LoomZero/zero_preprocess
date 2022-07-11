@@ -1,4 +1,10 @@
-(function() {
+/**
+ * @typedef {Object} T_CookiesOptions
+ * @property {string} [key] The key for the cookie
+ * @property {int} [expires]
+ */
+
+ (function() {
 
   /**
    * @param {string} component Name of the component
@@ -20,10 +26,40 @@
 
   /**
    * @param {string} name
+   * @returns {string}
+   */
+  ZeroComponent.prototype.getElementSelector = function element(name) {
+    return '.' + this.component + '__' + name;
+  };
+
+  /**
+   * @param {string} name
    * @return {jQuery}
    */
   ZeroComponent.prototype.element = function element(name) {
-    return this.find('.' + this.component + '__' + name);
+    return this.find(this.getElementSelector(name));
+  };
+
+  /**
+   * @param {(string|Object)} name
+   * @param {boolean} remain
+   * @returns {function}
+   */
+  ZeroComponent.prototype.createTemplate = function createTemplate(name, remain = false) {
+    var element = null;
+    if (typeof name === 'string') {
+      element = this.element(name);
+    } else if (name.name) {
+      element = this.element(name);
+    } else if (name.selector) {
+      element = jQuery(name.selector);
+    }
+
+    if (element === null || !element.length) return null;
+    var template = _.template(_.unescape(element.html()));
+
+    if (!remain) element.remove();
+    return template;
   };
 
   /**
@@ -107,6 +143,40 @@
       settings[index] = data[index];
     }
     return settings;
+  };
+
+  /**
+   * Get the value of a cookie
+   *
+   * @param {(string|T_CookiesOptions)} key
+   *
+   * @returns {mixed}
+   */
+  ZeroComponent.prototype.getCookie = function getCookie(key) {
+    if (!window.Cookies) throw new Error('Please add dependency "core/js-cookie" for the component "' + this.component + '"');
+    if (typeof key === 'object') {
+      key = key.key;
+    }
+    var value = window.Cookies.get(this.component + (key ? '__' + key : ''));
+    try {
+      value = JSON.parse(value);
+    } catch (e) {}
+    return value;
+  };
+
+  /**
+   * Set the value of a cookie
+   *
+   * @param {mixed} value
+   * @param {T_CookiesOptions} options
+   *
+   * @returns {mixed}
+   */
+  ZeroComponent.prototype.setCookie = function setCookie(value, options) {
+    if (!window.Cookies) throw new Error('Please add dependency "core/js-cookie" for the component "' + this.component + '"');
+    options = options || {};
+    window.Cookies.set(this.component + (options.key ? '__' + options.key : ''), JSON.stringify(value), options);
+    return value;
   };
 
   ZeroComponent.prototype.trigger = function trigger() {
