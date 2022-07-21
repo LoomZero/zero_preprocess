@@ -2,3 +2,7 @@ comp:
   js:
     js/src/ZeroComponent.js: {}
     js/zero.js: {}
+
+cookies:
+  js:
+    js/src/ZeroCookies.js: {}

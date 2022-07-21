@@ -10,16 +10,25 @@
   window.createComponent = function (component, object) {
     return {
       attach: function(context) {
-        jQuery('.' + component + ':not(.' + component + '--init)', context).each(function () {
+        jQuery('.' + component, context).each(function () {
           var item = jQuery(this);
+          var comp = null;
 
-          item.addClass(component + '--init');
-          var comp = new ZeroComponent(component, item);
-          for (var index in object) {
-            comp[index] = object[index];
+          if (item.hasClass(component + '--init')) {
+            comp = item.data('z-component');
+
+            comp.attach(context, item);
+          } else {
+            item.addClass(component + '--init');
+            comp = new ZeroComponent(component, item);
+            for (var index in object) {
+              comp[index] = object[index];
+            }
+            item.data('z-component', comp);
+            comp.attach(context, item);
+            comp.init(context, item);
+            item.addClass(component + '--inited');
           }
-          comp.init(context, item);
-          item.addClass(component + '--inited');
         });
       },
     };
