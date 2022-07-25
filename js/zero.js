@@ -10,7 +10,7 @@
   window.createComponent = function (component, object) {
     return {
       attach: function(context) {
-        jQuery('.' + component, context).each(function () {
+        jQuery('.' + component).each(function () {
           var item = jQuery(this);
           var comp = null;
 
