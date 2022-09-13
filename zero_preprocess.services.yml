@@ -15,3 +15,7 @@ services:
     class: Drupal\zero_preprocess\Config\ZeroConfigBag
     tags:
       - { name: zero_config }
+
+  plugin.manager.theme_builder:
+    class: Drupal\zero_preprocess\Service\ZeroThemeBuilderPluginManager
+    parent: default_plugin_manager

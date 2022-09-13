@@ -1,8 +1,12 @@
 <?php
 
+use Drupal\zero_preprocess\Base\ZeroThemeBuilderInterface;
 use Drupal\zero_preprocess\Service\PreprocessExtenderManager;
 
 function zero_preprocess_preprocess(&$vars, $hook, $template) {
+  /** @var \Drupal\zero_preprocess\Service\ZeroThemeBuilderPluginManager $manager */
+  $manager = Drupal::service('plugin.manager.theme_builder');
+
   if (!empty($template['zero']['preprocess'])) {
     /** @var PreprocessExtenderManager $extender */
     $extender = Drupal::service('zero.preprocess.extender');
@@ -10,6 +14,14 @@ function zero_preprocess_preprocess(&$vars, $hook, $template) {
     $vars['zero'] = [];
     $extender->preprocess($vars, $template['zero'], $template);
     $extender->includePreprocess($vars, $template);
+  }
+
+  $builder = $manager->getBuilder($hook);
+  if ($builder !== NULL) {
+    $builder
+      ->setTheme($vars)
+      ->setState(ZeroThemeBuilderInterface::STATE_RENDER)
+      ->preprocess($vars);
   }
 }
 
@@ -40,4 +52,24 @@ function zero_preprocess_module_implements_alter(&$implementations, $hook) {
     unset($implementations['zero_preprocess']);
     $implementations['zero_preprocess'] = $group;
   }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function zero_preprocess_theme($existing, $type, $theme, $path) {
+  /** @var \Drupal\zero_preprocess\Service\ZeroThemeBuilderPluginManager $manager */
+  $manager = Drupal::service('plugin.manager.theme_builder');
+
+  return $manager->getThemeFunctionsDefinition();
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function zero_preprocess_theme_suggestions_alter(array &$suggestions, array $vars, $hook) {
+  /** @var \Drupal\zero_preprocess\Service\ZeroThemeBuilderPluginManager $manager */
+  $manager = Drupal::service('plugin.manager.theme_builder');
+
+  $manager->alterSuggestions($suggestions, $vars, $hook);
 }
