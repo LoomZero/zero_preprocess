@@ -1,4 +1,12 @@
-(function () {
+/**
+ * @typedef {Object} T_CookiesOptions
+ * @property {string} [key] The key for the cookie
+ * @property {int} [expireDays]
+ * @property {(boolean|string)} [domain]
+ * @property {string} [path]
+ */
+
+ (function () {
 
   if (window.ZeroCookies !== undefined) return;
 
@@ -35,6 +43,31 @@
       return null;
     },
 
+  };
+
+  /**
+   * Get the value of a cookie
+   *
+   * @param {(string|T_CookiesOptions)} key
+   *
+   * @returns {mixed}
+   */
+  ZeroComponent.prototype.getCookie = function getCookie(key) {
+    if (typeof key === 'object') key = key.key;
+    return ZeroCookies.get(this.component + (key ? '__' + key : ''));
+  };
+
+  /**
+   * Set the value of a cookie
+   *
+   * @param {mixed} value
+   * @param {T_CookiesOptions} options
+   *
+   * @returns {this}
+   */
+  ZeroComponent.prototype.setCookie = function setCookie(value, options = {}) {
+    ZeroCookies.set(this.component + (options.key ? '__' + options.key : ''), value, options);
+    return this;
   };
 
 })();

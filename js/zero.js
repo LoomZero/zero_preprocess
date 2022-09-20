@@ -1,27 +1,27 @@
-(function () {
+(function ($) {
 
-  if (Drupal.zero !== undefined) return;
-  Drupal.zero = {};
+  if (Drupal.zero === undefined) Drupal.zero = {};
+
+  if (window.createComponent !== undefined) return;
 
   /**
    * @param {string} component Name of the component
    * @param {object} object
    */
-  window.createComponent = function (component, object) {
-    return {
+  Drupal.zero.createComponent = function (component, object) {
+    const compKey = ZeroComponent.getComponentKey(component);
+    Drupal.behaviors[compKey] = {
       attach: function(context) {
-        jQuery('.' + component).each(function () {
-          var item = jQuery(this);
-          var comp = null;
-
+        $('.' + component).each(function () {
+          const item = $(this);
           if (item.hasClass(component + '--init')) {
-            comp = item.data('z-component');
+            const comp = item.data('z-component');
 
             comp.attach(context, item);
           } else {
             item.addClass(component + '--init');
-            comp = new ZeroComponent(component, item);
-            for (var index in object) {
+            const comp = new ZeroComponent(component, item);
+            for (const index in object) {
               comp[index] = object[index];
             }
             item.data('z-component', comp);
@@ -32,6 +32,22 @@
         });
       },
     };
+    return Drupal.behaviors[compKey];
+  };
+  /**
+   * @deprecated Please use "Drupal.zero.createComponent" instead
+   * @type {function}
+   */
+  window.createComponent = Drupal.zero.createComponent.bind(Drupal.zero);
+
+  Drupal.zero.getComponent = function (component) {
+    if (component instanceof ZeroComponent) {
+      return component;
+    } else if (component instanceof $) {
+      return component.data('z-component');
+    } else {
+      return null;
+    }
   };
 
-})();
+})(jQuery);

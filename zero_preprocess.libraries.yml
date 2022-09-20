@@ -2,6 +2,8 @@ comp:
   js:
     js/src/ZeroComponent.js: {}
     js/zero.js: {}
+  dependencies:
+    - core/jquery
 
 cookies:
   js:
