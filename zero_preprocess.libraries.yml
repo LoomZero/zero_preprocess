@@ -5,6 +5,15 @@ comp:
   dependencies:
     - core/jquery
 
+comp.transition:
+  js:
+    js/src/ZeroComponent.transition.js: {}
+  css:
+    component:
+      css/zero.transition.css: {}
+  dependencies:
+    - zero_preprocess/comp
+
 cookies:
   js:
     js/src/ZeroCookies.js: {}

@@ -1,0 +1,45 @@
+/* Effect: fade */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--fade--time, 0.5s) ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Effect: fade-up */
+
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: opacity var(--fade-up--time, 0.5s) ease, transform var(--fade-up--time, 0.5s) ease;
+}
+
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(calc(0px - var(--fade-up--distance, 1em)));
+}
+
+.fade-up-enter-from {
+  opacity: 0;
+  transform: translateY(var(--fade-up--distance, 1em));
+}
+
+/* Effect: fade-down */
+
+.fade-down-enter-active,
+.fade-down-leave-active {
+  transition: opacity var(--fade-down--time, 0.5s) ease, transform var(--fade-down--time, 0.5s) ease;
+}
+
+.fade-down-leave-to {
+  opacity: 0;
+  transform: translateY(var(--fade-down--distance, 1em));
+}
+
+.fade-down-enter-from {
+  opacity: 0;
+  transform: translateY(calc(0px - var(--fade-down--distance, 1em)));
+}

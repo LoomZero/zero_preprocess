@@ -15,7 +15,7 @@
         $('.' + component).each(function () {
           const item = $(this);
           if (item.hasClass(component + '--init')) {
-            const comp = item.data('z-component');
+            const comp = item.data('z-component')[component];
 
             comp.attach(context, item);
           } else {
@@ -24,7 +24,11 @@
             for (const index in object) {
               comp[index] = object[index];
             }
-            item.data('z-component', comp);
+
+            const register = item.data('z-component') || {};
+            register[component] = comp;
+            item.data('z-component', register);
+
             comp.attach(context, item);
             comp.init(context, item);
             item.addClass(component + '--inited');
@@ -40,11 +44,23 @@
    */
   window.createComponent = Drupal.zero.createComponent.bind(Drupal.zero);
 
-  Drupal.zero.getComponent = function (component) {
+  Drupal.zero.getComponent = function (component, key = 'default') {
     if (component instanceof ZeroComponent) {
       return component;
     } else if (component instanceof $) {
-      return component.data('z-component');
+      const register = component.data('z-component') || {};
+      if (key === 'default') {
+        const keys = Object.keys(register);
+
+        if (keys.length === 0) {
+          return null;
+        } else if (keys.length === 1) {
+          return register[keys[0]];
+        } else {
+          throw new Error('Multiple components detected but requested is "default". Choose one of this "' + keys.join(', ') + '"');
+        }
+      }
+      return register[key] || null;
     } else {
       return null;
     }
