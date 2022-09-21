@@ -2,7 +2,6 @@
 
   ZeroComponent.prototype.appear = function appear(content, { effect = 'fade', persistent = false }, callback = null) {
     content
-      .addClass(effect + '-enter-active')
       .addClass(effect + '-enter-from');
 
     const onAppear = () => {
@@ -15,17 +14,17 @@
 
     setTimeout(() => {
       content
-        .removeClass(effect + '-enter-from')
+        .addClass(effect + '-enter-active')
         .addClass(effect + '-enter-to')
+        .removeClass(effect + '-enter-from')
         .on('transitionend', onAppear);
-    }, 1);
+    }, 10);
 
     return content;
   };
 
   ZeroComponent.prototype.disappear = function disappear(content, { effect = 'fade', persistent = false }, callback = null) {
     content
-      .addClass(effect + '-leave-active')
       .addClass(effect + '-leave-from');
 
     const onAppear = () => {
@@ -38,10 +37,11 @@
 
     setTimeout(() => {
       content
+        .addClass(effect + '-leave-active')
         .removeClass(effect + '-leave-from')
         .addClass(effect + '-leave-to')
         .on('transitionend', onAppear);
-    }, 1);
+    }, 10);
 
     return content;
   };
