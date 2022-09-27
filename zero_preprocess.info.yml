@@ -3,4 +3,4 @@ type: module
 description: 'Add preprocess file loading functionality'
 core_version_requirement: 9.*
 package: zero
-version: 0.9.1
+version: 0.9.2

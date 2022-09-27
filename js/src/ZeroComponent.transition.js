@@ -1,6 +1,6 @@
 (function () {
 
-  ZeroComponent.prototype.appear = function appear(content, { effect = 'fade', persistent = false }, callback = null) {
+  ZeroComponent.prototype.appear = function appear(content, { effect = 'fade', persistent = false, initTime = 50 }, callback = null) {
     content
       .addClass(effect + '-enter-from');
 
@@ -18,12 +18,12 @@
         .addClass(effect + '-enter-to')
         .removeClass(effect + '-enter-from')
         .on('transitionend', onAppear);
-    }, 10);
+    }, initTime);
 
     return content;
   };
 
-  ZeroComponent.prototype.disappear = function disappear(content, { effect = 'fade', persistent = false }, callback = null) {
+  ZeroComponent.prototype.disappear = function disappear(content, { effect = 'fade', persistent = false, initTime = 50 }, callback = null) {
     content
       .addClass(effect + '-leave-from');
 
@@ -41,7 +41,7 @@
         .removeClass(effect + '-leave-from')
         .addClass(effect + '-leave-to')
         .on('transitionend', onAppear);
-    }, 10);
+    }, initTime);
 
     return content;
   };
