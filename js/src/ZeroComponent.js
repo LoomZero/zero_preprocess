@@ -2,6 +2,8 @@
 
   if (window.ZeroComponent !== undefined) return;
 
+  let _settings = null;
+
   /**
    * @param {string} component Name of the component
    * @param {jQuery} item
@@ -141,14 +143,16 @@
    * @return {Object} settings
    */
   ZeroComponent.prototype.settings = function settings() {
-    const uuid = this.uuid();
-    const settings = drupalSettings.zero && drupalSettings.zero.settings && drupalSettings.zero.settings[uuid] || {};
-    const data = this.item.data();
+    if (_settings === null) {
+      const uuid = this.uuid();
+      const data = this.item.data();
+      _settings = drupalSettings.zero && drupalSettings.zero.settings && drupalSettings.zero.settings[uuid] || {};
 
-    for (const index in data) {
-      settings[index] = data[index];
+      for (const index in data) {
+        _settings[index] = data[index];
+      }
     }
-    return settings;
+    return _settings;
   };
 
   ZeroComponent.prototype.trigger = function trigger() {
