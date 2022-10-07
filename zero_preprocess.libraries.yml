@@ -17,3 +17,5 @@ comp.transition:
 cookies:
   js:
     js/src/ZeroCookies.js: {}
+  dependencies:
+    - zero_preprocess/comp

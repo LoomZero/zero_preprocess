@@ -8,7 +8,7 @@
    * @param {string} component Name of the component
    * @param {object} object
    */
-  Drupal.zero.createComponent = function (component, object) {
+  Drupal.zero.createComponent = function(component, object) {
     const compKey = ZeroComponent.getComponentKey(component);
     Drupal.behaviors[compKey] = {
       attach: function(context) {
@@ -38,13 +38,17 @@
     };
     return Drupal.behaviors[compKey];
   };
+  
   /**
    * @deprecated Please use "Drupal.zero.createComponent" instead
    * @type {function}
    */
-  window.createComponent = Drupal.zero.createComponent.bind(Drupal.zero);
+  window.createComponent = function() {
+    console.warn('DEPRECATION: Please use "Drupal.zero.createComponent" instead of "createComponent".');
+    Drupal.zero.createComponent(...arguments);
+  };
 
-  Drupal.zero.getComponent = function (component, key = 'default') {
+  Drupal.zero.getComponent = function(component, key = 'default') {
     if (component instanceof ZeroComponent) {
       return component;
     } else if (component instanceof $) {
