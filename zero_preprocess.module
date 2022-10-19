@@ -20,7 +20,7 @@ function zero_preprocess_preprocess(&$vars, $hook, $template) {
   if ($builder !== NULL) {
     $builder
       ->setTheme($vars)
-      ->setState(ZeroThemeBuilderInterface::STATE_RENDER)
+      ->setState(ZeroThemeBuilderInterface::STATE_RENDER, $vars)
       ->preprocess($vars);
   }
 }
@@ -72,4 +72,14 @@ function zero_preprocess_theme_suggestions_alter(array &$suggestions, array $var
   $manager = Drupal::service('plugin.manager.theme_builder');
 
   $manager->alterSuggestions($suggestions, $vars, $hook);
+}
+
+/**
+ * Implements hook_library_info_build().
+ */
+function zero_preprocess_library_info_build() {
+  /** @var \Drupal\zero_preprocess\Service\ZeroThemeBuilderPluginManager $manager */
+  $manager = Drupal::service('plugin.manager.theme_builder');
+
+  return $manager->getLibrariesDefinitions();
 }

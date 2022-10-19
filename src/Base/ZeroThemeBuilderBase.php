@@ -12,15 +12,17 @@ use Drupal\zero_entitywrapper\Content\ContentWrapper;
 abstract class ZeroThemeBuilderBase extends PluginBase implements ZeroThemeBuilderInterface {
 
   protected array $theme = [];
+  protected array $render = [];
   protected string $state = ZeroThemeBuilderInterface::STATE_NORMAL;
 
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->theme['#theme'] = $plugin_id;
+    $this->theme['theme'] = $plugin_id;
   }
 
-  public function setState(string $state): self {
+  public function setState(string $state, array &$render = []): self {
     $this->state = $state;
+    $this->render = &$render;
     return $this;
   }
 
@@ -28,8 +30,12 @@ abstract class ZeroThemeBuilderBase extends PluginBase implements ZeroThemeBuild
     return $this->state;
   }
 
-  public function setTheme(array &$theme): ZeroThemeBuilderInterface {
-    $this->theme = &$theme;
+  public function setTheme(array $theme): ZeroThemeBuilderInterface {
+    $this->theme = [];
+    foreach ($theme as $key => $value) {
+      if (str_starts_with($key, '#')) $key = substr($key, 1);
+      $this->theme[$key] = $value;
+    }
     return $this;
   }
 
@@ -43,7 +49,11 @@ abstract class ZeroThemeBuilderBase extends PluginBase implements ZeroThemeBuild
 
   public function toRenderable() {
     if ($this->validate($this->theme)) {
-      return $this->theme;
+      $renderable = [];
+      foreach ($this->theme as $key => $value) {
+        $renderable['#' . $key] = $value;
+      }
+      return $renderable;
     } else {
       return [
         '#markup' => 'Invalid theme function "' . $this->getPluginId() . '"',
@@ -60,7 +70,7 @@ abstract class ZeroThemeBuilderBase extends PluginBase implements ZeroThemeBuild
     if (!empty($this->getPluginDefinition()['validate'])) {
       if (!empty($this->getPluginDefinition()['validate']['required'])) {
         foreach ($this->getPluginDefinition()['validate']['required'] as $field => $warning) {
-          if (empty($theme['#' . $field])) {
+          if (empty($theme[$field])) {
             Drupal::messenger()->addWarning(strtoupper('[' . $this->getPluginId() . ']: ') . $warning);
             return FALSE;
           }
@@ -70,36 +80,29 @@ abstract class ZeroThemeBuilderBase extends PluginBase implements ZeroThemeBuild
     return TRUE;
   }
 
-  public function getKey(string $key): string {
-    if ($this->state === ZeroThemeBuilderInterface::STATE_NORMAL) {
-      return '#' . $key;
-    }
-    return $key;
-  }
-
   public function addLibrary(string $context, string $library = NULL): self {
     if ($library === NULL) {
-      $this->theme['#attached']['library'][] = $context;
+      $this->render['#attached']['library'][] = $context;
     } else {
-      $this->theme['#attached']['library'][] = $context . '/' . $library;
+      $this->render['#attached']['library'][] = $context . '/' . $library;
     }
     return $this;
   }
 
   public function getUUID(): string {
-    if (empty($this->theme[$this->getKey('uuid')])) {
+    if (empty($this->render['uuid'])) {
       $uuidGenerator = Drupal::service('uuid');
-      $this->theme[$this->getKey('uuid')] = $uuidGenerator->generate();
+      $this->render['uuid'] = $uuidGenerator->generate();
     }
-    return $this->theme[$this->getKey('uuid')];
+    return $this->render['uuid'];
   }
 
   public function addSettings(array $settings = []): self {
     $uuid = $this->getUUID();
-    if (isset($this->theme['#attached']['drupalSettings']['zero']['settings'][$uuid])) {
-      $this->theme['#attached']['drupalSettings']['zero']['settings'][$uuid] = array_merge($this->theme['#attached']['drupalSettings']['zero']['settings'][$uuid], $settings);
+    if (isset($this->render['#attached']['drupalSettings']['zero']['settings'][$uuid])) {
+      $this->render['#attached']['drupalSettings']['zero']['settings'][$uuid] = array_merge($this->render['#attached']['drupalSettings']['zero']['settings'][$uuid], $settings);
     } else {
-      $this->theme['#attached']['drupalSettings']['zero']['settings'][$uuid] = $settings;
+      $this->render['#attached']['drupalSettings']['zero']['settings'][$uuid] = $settings;
     }
     return $this;
   }

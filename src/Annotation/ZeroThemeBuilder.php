@@ -15,6 +15,9 @@ class ZeroThemeBuilder extends Plugin {
   /** @var string */
   public $id;
 
+  /** @var array|bool */
+  public $component;
+
   /** @var array */
   public $theme;
 
