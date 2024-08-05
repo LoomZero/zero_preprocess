@@ -133,4 +133,18 @@ class ProxyCollection extends ArrayObject {
     return $this;
   }
 
+  public function find(callable $callback) {
+    foreach ($this as $index => $item) {
+      if ($callback($item, $index, $this)) return $item;
+    }
+    return NULL;
+  }
+
+  public function findIndex(callable $callback) {
+    foreach ($this as $index => $item) {
+      if ($callback($item, $index, $this)) return $index;
+    }
+    return NULL;
+  }
+
 }
