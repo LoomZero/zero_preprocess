@@ -12,7 +12,7 @@ class ProxyCollection extends ArrayObject {
       if (method_exists($item, $name)) {
         $value = $item->{$name}(...$arguments);
         if ($value instanceof ProxyCollection) {
-          foreach ($value as $value_delta => $value_item) {
+          foreach ($value as $value_item) {
             $results[] = $value_item;
           }
         } else {

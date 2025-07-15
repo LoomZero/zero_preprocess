@@ -1,46 +1,38 @@
 (function () {
 
   ZeroComponent.prototype.appear = function appear(content, { effect = 'fade', persistent = false, initTime = 50 }, callback = null) {
-    content
-      .addClass(effect + '-enter-from');
+    content.classList.add(effect + '-enter-from');
 
     const onAppear = () => {
-      content
-        .removeClass(effect + '-enter-active')
-        .off('transitionend', onAppear);
-      if (!persistent) content.removeClass(effect + '-enter-to');
+      content.classList.remove(`${effect}-enter-active`);
+      content.removeEventListener('transitioned', onAppear);
+      if (!persistent) content.classList.remove(`${effect}-enter-to`);
       if (callback) callback();
     };
 
     setTimeout(() => {
-      content
-        .addClass(effect + '-enter-active')
-        .addClass(effect + '-enter-to')
-        .removeClass(effect + '-enter-from')
-        .on('transitionend', onAppear);
+      content.classList.add(`${effect}-enter-active`, `${effect}-enter-to`);
+      content.classList.remove(`${effect}-enter-from`);
+      content.addEventListener('transitionend', onAppear);
     }, initTime);
 
     return content;
   };
 
   ZeroComponent.prototype.disappear = function disappear(content, { effect = 'fade', persistent = false, initTime = 50 }, callback = null) {
-    content
-      .addClass(effect + '-leave-from');
+    content.classList.add(`${effect}-leave-from`);
 
     const onAppear = () => {
-      content
-        .removeClass(effect + '-leave-active')
-        .off('transitionend', onAppear);
-      if (!persistent) content.removeClass(effect + '-leave-to');
+      content.classList.remove(`${effect}-leave-active`);
+      content.removeEventListener('transitionend', onAppear);
+      if (!persistent) content.classList.remove(`${effect}-leave-to`);
       if (callback) callback();
     };
 
     setTimeout(() => {
-      content
-        .addClass(effect + '-leave-active')
-        .removeClass(effect + '-leave-from')
-        .addClass(effect + '-leave-to')
-        .on('transitionend', onAppear);
+      content.classList.add(`${effect}-leave-active`, `${effect}-leave-to`);
+      content.classList.remove(`${effect}-leave-from`);
+      content.addEventListener('transitionend', onAppear);
     }, initTime);
 
     return content;

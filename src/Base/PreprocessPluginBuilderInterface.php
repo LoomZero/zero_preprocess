@@ -2,11 +2,9 @@
 
 namespace Drupal\zero_preprocess\Base;
 
-interface PreprocessExtenderInterface {
+interface PreprocessPluginBuilderInterface {
 
   public function weight(): int;
-
-  public function config(): array;
 
   public function registry(array &$zero, array $item, $name, array $theme_registry);
 
