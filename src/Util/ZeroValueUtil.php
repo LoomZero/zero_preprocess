@@ -11,7 +11,7 @@ class ZeroValueUtil {
    * @param callable|array|string $value
    * @param ZeroBase|null $context
    */
-  public static function getValue(&$value, ZeroBase $context = NULL) {
+  public static function getValue(&$value, ?ZeroBase $context = NULL) {
     if (isset($value['#zero_value'])) return $value['#zero_value'];
     if (is_callable($value)) {
       $value['#zero_value'] = $value($context);
