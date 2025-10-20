@@ -10,18 +10,15 @@ use Drupal\Component\Annotation\Plugin;
  *
  * @Annotation
  */
-class ZeroThemeBuilder extends Plugin {
+class PreprocessPluginBuilder extends Plugin {
 
   /** @var string */
   public $id;
 
-  /** @var array|bool */
-  public $component;
+  /** @var string */
+  public $label;
 
-  /** @var array */
-  public $theme;
-
-  /** @var array */
-  public $validate;
+  /** @var string */
+  public $description;
 
 }
