@@ -12,6 +12,6 @@ interface ZeroLogableInterface {
 
   public function doLog(string $type, array $args = []);
 
-  public function log(string $event, string $message_template = NULL, string $mode = self::LOG_MODE_NORMAL);
+  public function log(string $event, ?string $message_template = NULL, string $mode = self::LOG_MODE_NORMAL);
 
 }

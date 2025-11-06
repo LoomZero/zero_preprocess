@@ -80,7 +80,7 @@ abstract class ZeroThemeBuilderBase extends PluginBase implements ZeroThemeBuild
     return TRUE;
   }
 
-  public function addLibrary(string $context, string $library = NULL): self {
+  public function addLibrary(string $context, ?string $library = NULL): self {
     if ($library === NULL) {
       $this->render['#attached']['library'][] = $context;
     } else {

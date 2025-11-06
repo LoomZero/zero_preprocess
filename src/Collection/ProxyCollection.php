@@ -52,7 +52,7 @@ class ProxyCollection extends ArrayObject {
     return array_map($callback, $this->getArrayCopy(), ...$args);
   }
 
-  public function filter(callable $callback = NULL, int $flag = 0) {
+  public function filter(?callable $callback = NULL, int $flag = 0) {
     return $this->arrayCall('array_filter', $callback, $flag);
   }
 
@@ -69,11 +69,11 @@ class ProxyCollection extends ArrayObject {
     return $this;
   }
 
-  public function slice(int $offset, int $length = NULL, bool $preserve_keys = FALSE): array {
+  public function slice(int $offset, ?int $length = NULL, bool $preserve_keys = FALSE): array {
     return $this->itemCall('array_slice', $offset, $length, $preserve_keys);
   }
 
-  public function splice(int $offset , int $length = NULL, $replacement = []): array {
+  public function splice(int $offset , ?int $length = NULL, $replacement = []): array {
     return $this->itemCall('array_slice', $offset, $length, $replacement);
   }
 

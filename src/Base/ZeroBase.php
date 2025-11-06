@@ -28,7 +28,7 @@ abstract class ZeroBase implements ZeroEventableInterface, ZeroLogableInterface 
     $this->doLog($event, $args);
   }
 
-  public function log(string $event, string $message_template = NULL, string $mode = self::LOG_MODE_NORMAL) {
+  public function log(string $event, ?string $message_template = NULL, string $mode = self::LOG_MODE_NORMAL) {
     if ($message_template === NULL) {
       $this->logger[$event]['mode'] = $mode;
     } else {
