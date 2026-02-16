@@ -25,9 +25,9 @@ class ZeroValueUtil {
         $value['#context']['context'] = $context->getContext();
       }
       if (isset($value['#after']) && is_callable($value['#after'])) {
-        $value['#zero_value'] = $value['#after']($renderer->renderPlain($value)->__toString());
+        $value['#zero_value'] = $value['#after']($renderer->renderInIsolation($value)->__toString());
       } else {
-        $value['#zero_value'] = $renderer->renderPlain($value)->__toString();
+        $value['#zero_value'] = $renderer->renderInIsolation($value)->__toString();
       }
     } else if (is_array($value) && !empty($value['#type']) && $value['#type'] === 'inline_template') {
       $value['#zero_value'] = ''; // to avoid recursion
@@ -39,9 +39,9 @@ class ZeroValueUtil {
         $value['#context']['context'] = $context->getContext();
       }
       if (isset($value['#after']) && is_callable($value['#after'])) {
-        $value['#zero_value'] = $value['#after']($renderer->renderPlain($value)->__toString());
+        $value['#zero_value'] = $value['#after']($renderer->renderInIsolation($value)->__toString());
       } else {
-        $value['#zero_value'] = $renderer->renderPlain($value)->__toString();
+        $value['#zero_value'] = $renderer->renderInIsolation($value)->__toString();
       }
     } else {
       return $value;
