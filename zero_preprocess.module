@@ -3,7 +3,14 @@
 use Drupal\zero_preprocess\Base\ZeroThemeBuilderInterface;
 use Drupal\zero_preprocess\Service\PreprocessExtenderManager;
 
-function zero_preprocess_preprocess(&$vars, $hook, $template) {
+/**
+ * Includes preprocess files and runs preprocess functions.
+ *
+ * Is called like a normal preprocess function and registered via hook_theme_registry_alter().
+ * @see zero_preprocess_theme_registry_alter()
+ *
+ */
+function zero_preprocess_process_preprocessors(&$vars, $hook, $template) {
   /** @var \Drupal\zero_preprocess\Service\ZeroThemeBuilderPluginManager $manager */
   $manager = Drupal::service('plugin.manager.theme_builder');
 
@@ -26,6 +33,11 @@ function zero_preprocess_preprocess(&$vars, $hook, $template) {
 }
 
 function zero_preprocess_theme_registry_alter(&$theme_registry) {
+  foreach ($theme_registry as $hook => $info) {
+    // Run always at the end.
+    $theme_registry[$hook]['preprocess functions'][] = 'zero_preprocess_process_preprocessors';
+  }
+
   /** @var PreprocessExtenderManager $extender */
   $extender = Drupal::service('zero.preprocess.extender');
 
@@ -43,14 +55,6 @@ function zero_preprocess_theme_registry_alter(&$theme_registry) {
     if (count($zero)) {
       $theme_registry[$name]['zero'] = $zero;
     }
-  }
-}
-
-function zero_preprocess_module_implements_alter(&$implementations, $hook) {
-  if ($hook === 'preprocess') {
-    $group = $implementations['zero_preprocess'];
-    unset($implementations['zero_preprocess']);
-    $implementations['zero_preprocess'] = $group;
   }
 }
 
